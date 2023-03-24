@@ -20,12 +20,12 @@ func main() {
 func sendEmain(info string, demo string) {
 	e := email.NewEmail()
 	e.From = "Carpe-Wang<1592622761@qq.com>"
-	e.To = []string{"1592622761@qq.com"}
+	e.To = []string{"1592622761@qq.com", "582044998@qq.com"}
 	e.Subject = "每日天气"
 	//e.HTML = []byte(info)
 	b := []byte(info + demo)
 	e.HTML = []byte(b)
-	err := e.Send("smtp.qq.com:587", smtp.PlainAuth("", "1592622761@qq.com", "//注意不是密码", "smtp.qq.com"))
+	err := e.Send("smtp.qq.com:587", smtp.PlainAuth("", "1592622761@qq.com", "smtp密码", "smtp.qq.com"))
 	if err != nil {
 		return
 	}
@@ -50,7 +50,7 @@ func doHttpGetRequest(url string) (rlt string, err error) {
 func getWeather() (string, string, error) {
 	url := "https://restapi.amap.com/v3/weather/weatherInfo?"
 	key := "我是用的是高德地图API得到一个key"
-	city := "410223"
+	city := "查官网"
 	ext := "all"
 	rlt, err := doHttpGetRequest(url + "key=" + key + "&city=" + city + "&extensions=" + ext) //请求接口
 	//rlt, err := doHttpGetRequest(url + key + city + ext) //请求接口
@@ -66,12 +66,6 @@ func getWeather() (string, string, error) {
 		output := fore.Province + fore.City + " 预报时间：" + fore.Reporttime + "\n"
 		fmt.Println("----------------", output)
 		var str, subject string
-		//for i := 0; i < len(fore.Casts); i++ {
-		//	cast = fore.Casts[i]
-		//	str += "日期：" + cast.Date + "\t星期" + NumToStr(cast.Week) +
-		//		"\n白天：【天气：" + cast.Dayweather + "\t	温度：" + cast.Daytemp + "\t	风向：" + cast.Daywind + "\t	风力：" + cast.Daypower + "】" +
-		//		"\n夜晚：【天气：" + cast.Nightweather + "\t	温度：" + cast.Nighttemp + "\t\t	风向：" + cast.Nightwind + "\t	风力：" + cast.Nightpower + "】\r\n"
-		//}
 		cast = fore.Casts[0]
 		str += "日期为：" + cast.Date + "-" + "星期" + NumToStr(cast.Week) + "-" + "白天: [" + cast.Dayweather + "  " + cast.Daytemp + "摄氏度   " + cast.Daywind + "风" + "并且风力为:" + cast.Daypower + "      " + "夜晚:[天气：" + cast.Nightweather + "温度：" + cast.Nighttemp + "]"
 		subject = verity(fore.Casts[0].Dayweather, fore.Casts[0].Nightweather)
